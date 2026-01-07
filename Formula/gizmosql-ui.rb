@@ -7,7 +7,7 @@ class GizmosqlUi < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/gizmodata/gizmosql-ui/releases/download/v#{version}/gizmosql-ui-macos-arm64"
-      sha256 "PLACEHOLDER_SHA256"
+      sha256 "eac873f917d2e43abda0ff01727ce6473e0d44802be1c7adf34bcedd664f9760"
 
       def install
         bin.install "gizmosql-ui-macos-arm64" => "gizmosql-ui"
