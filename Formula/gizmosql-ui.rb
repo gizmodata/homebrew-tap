@@ -1,7 +1,7 @@
 class GizmosqlUi < Formula
   desc "Web-based SQL interface for GizmoSQL servers"
   homepage "https://github.com/gizmodata/gizmosql-ui"
-  version "1.0.4"
+  version "2.0.0"
   license "Apache-2.0"
 
   on_macos do
