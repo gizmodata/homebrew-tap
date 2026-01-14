@@ -4,17 +4,17 @@
 class Gizmosql < Formula
   desc "High-performance SQL server built on DuckDB/SQLite with Arrow Flight SQL"
   homepage "https://github.com/gizmodata/gizmosql"
-  version "1.14.1"
+  version "1.14.2"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
-      url "https://github.com/gizmodata/gizmosql/releases/download/v1.14.1/gizmosql_cli_macos_arm64.zip"
-      sha256 "a8e6ad30c61c79bdf13f78b3c6f755f2fd39127735a949470089377c06d3b4fa"
+      url "https://github.com/gizmodata/gizmosql/releases/download/v1.14.2/gizmosql_cli_macos_arm64.zip"
+      sha256 "c8025e2a3fe3960c4ed277857aa141cabf8afb30df18037621a7b3921081649f"
     end
     on_intel do
-      url "https://github.com/gizmodata/gizmosql/releases/download/v1.14.1/gizmosql_cli_macos_amd64.zip"
-      sha256 "b5082cf915f90768c45ac5002f8e1ebf465f1079f6821fbdd7838cdd34988e82"
+      url "https://github.com/gizmodata/gizmosql/releases/download/v1.14.2/gizmosql_cli_macos_amd64.zip"
+      sha256 "b61d3bfbbd925a70b5a547f310692ed92f917eec21dbdf0a3b72a89cc6e13e72"
     end
   end
 
