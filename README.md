@@ -1,4 +1,4 @@
-# GizmoData Homebrew Tap
+# [GizmoData](https://gizmodata.com) Homebrew Tap
 
 This is the official Homebrew tap for GizmoData tools.
 
