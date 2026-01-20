@@ -6,12 +6,14 @@ This is the official Homebrew tap for GizmoData tools.
 
 ```bash
 brew tap gizmodata/tap
+brew install gizmosql
 brew install gizmosql-ui
 ```
 
 Or install directly:
 
 ```bash
+brew install gizmodata/tap/gizmosql
 brew install gizmodata/tap/gizmosql-ui
 ```
 
