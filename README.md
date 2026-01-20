@@ -31,13 +31,13 @@ brew install gizmodata/tap/gizmosql-ui
 Start the server:
 
 ```bash
-GIZMOSQL_PASSWORD=secret gizmosql_server --database-filename /path/to/database.duckdb
+GIZMOSQL_PASSWORD=tiger gizmosql_server --database-filename /path/to/database.duckdb --username scott
 ```
 
 Connect with the client:
 
 ```bash
-gizmosql_client --host localhost --port 31337 --password secret --command Execute --query "SELECT 1"
+gizmosql_client --host localhost --port 31337 --username scott --password tiger --command Execute --query "SELECT 1"
 ```
 
 For TLS and authentication options, run `gizmosql_server --help` or `gizmosql_client --help`.
