@@ -1,13 +1,13 @@
 class GizmosqlUi < Formula
   desc "Web-based SQL interface for GizmoSQL servers"
   homepage "https://github.com/gizmodata/gizmosql-ui"
-  version "2.1.0"
+  version "2.2.0"
   license "Apache-2.0"
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/gizmodata/gizmosql-ui/releases/download/v#{version}/gizmosql-ui-macos-arm64"
-      sha256 "e35a710cce24cf86d01df8664aa31a98902ce6ef9b12ba1414945a1e8892be8b"
+      sha256 "73dce37f71cc92a84a34bfe252adb50517effa7cf21b8c85b84867c264030d58"
 
       def install
         bin.install "gizmosql-ui-macos-arm64" => "gizmosql-ui"
