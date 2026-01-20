@@ -19,11 +19,28 @@ brew install gizmodata/tap/gizmosql-ui
 
 | Formula | Description |
 |---------|-------------|
-| `gizmosql-ui` | Web-based SQL interface for GizmoSQL servers |
+| [`gizmosql`](https://github.com/gizmodata/gizmosql) | High-performance SQL server built on DuckDB/SQLite with Arrow Flight SQL |
+| [`gizmosql-ui`](https://github.com/gizmodata/gizmosql-ui) | Web-based SQL interface for GizmoSQL servers |
 
 ## Usage
 
-After installation, run:
+### gizmosql
+
+Start the server:
+
+```bash
+GIZMOSQL_PASSWORD=secret gizmosql_server --database-filename /path/to/database.duckdb
+```
+
+Connect with the client:
+
+```bash
+gizmosql_client --host localhost --port 31337 --password secret --command Execute --query "SELECT 1"
+```
+
+For TLS and authentication options, run `gizmosql_server --help` or `gizmosql_client --help`.
+
+### gizmosql-ui
 
 ```bash
 gizmosql-ui
