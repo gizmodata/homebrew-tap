@@ -48,7 +48,7 @@ For TLS and authentication options, run `gizmosql_server --help` or `gizmosql_cl
 gizmosql-ui
 ```
 
-This starts a local web server at http://localhost:4821 and opens your browser.
+This starts a local web server at http://localhost:3000 and opens your browser.
 
 ## License
 
