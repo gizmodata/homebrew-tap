@@ -7,11 +7,22 @@ class Gizmosql < Formula
   version "1.15.1"
   license "Apache-2.0"
 
-  depends_on arch: :arm64
-  depends_on :macos
+  on_macos do
+    if Hardware::CPU.arm?
+      url "https://github.com/gizmodata/gizmosql/releases/download/v#{version}/gizmosql_cli_macos_arm64.zip"
+      sha256 "b31a7f37e6439f7818856b1b65c5cfe99765ad7d91a28a1bb330a4a072e750df"
+    end
+  end
 
-  url "https://github.com/gizmodata/gizmosql/releases/download/v1.15.1/gizmosql_cli_macos_arm64.zip"
-  sha256 "b31a7f37e6439f7818856b1b65c5cfe99765ad7d91a28a1bb330a4a072e750df"
+  on_linux do
+    if Hardware::CPU.arm?
+      url "https://github.com/gizmodata/gizmosql/releases/download/v#{version}/gizmosql_cli_linux_arm64.zip"
+      sha256 "cf8b2c99b2029d64aa668a876840c1d95b2d894dabc2cfb7923314b7c1b0c1f8"
+    elsif Hardware::CPU.intel?
+      url "https://github.com/gizmodata/gizmosql/releases/download/v#{version}/gizmosql_cli_linux_amd64.zip"
+      sha256 "3a48527c964ae0be8b8be50e17b7a2a411c28cf9c130b899319db4899ffaaefa"
+    end
+  end
 
   def install
     bin.install "gizmosql_server"
