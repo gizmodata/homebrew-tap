@@ -10,17 +10,17 @@ class Gizmosql < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/gizmodata/gizmosql/releases/download/v1.16.0/gizmosql_cli_macos_arm64.zip"
-      sha256 "f216f6407012be4f271736bebefcf4aed63e0b552ce74f0099e0b60acfd3d5b2"
+      sha256 "aad846d73d786a5b60aaac4bbd076089880729b7a6b8938288ed53a3b95fa435"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
       url "https://github.com/gizmodata/gizmosql/releases/download/v1.16.0/gizmosql_cli_linux_arm64.zip"
-      sha256 "368e5978f3954e661df26e19d879bcd6861d58e860b99158a4c2e02ec5fbcbda"
+      sha256 "7c8fbc80e3528059baeba07d2c082d22c05c9676a8d9154c4685b830f30eb143"
     elsif Hardware::CPU.intel?
       url "https://github.com/gizmodata/gizmosql/releases/download/v1.16.0/gizmosql_cli_linux_amd64.zip"
-      sha256 "0d52576a9181c01924b1db2bd0466b2fbbf89e8260d71ed43ef6d892c10424f1"
+      sha256 "b41dfb88a4a988616d0526be6aadad3079802220b2fed10f6c3326fec0390a75"
     end
   end
 
