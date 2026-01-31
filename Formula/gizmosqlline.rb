@@ -1,11 +1,11 @@
 class Gizmosqlline < Formula
   desc "GizmoSQL JDBC command-line client for GizmoSQL servers"
   homepage "https://github.com/gizmodata/gizmosqlline"
-  version "2.4.1"
+  version "2.4.2"
   license "Apache-2.0"
 
   url "https://github.com/gizmodata/gizmosqlline/releases/download/v#{version}/gizmosqlline.jar"
-  sha256 "57f154913b50e3264d11dc582ce1ffe76aeeca9ead4309a198756876977aad34"
+  sha256 "a3bbeeb94d44508a9ddc2fa2e18a11acb587729b356f0c57109c323296945e49"
 
   depends_on "openjdk"
 
@@ -15,7 +15,11 @@ class Gizmosqlline < Formula
     (bin/"gizmosqlline").write <<~EOS
       #!/bin/bash
       export JAVA_HOME="#{Formula["openjdk"].opt_prefix}"
-      exec "${JAVA_HOME}/bin/java" --add-opens=java.base/java.nio=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -jar "#{libexec}/gizmosqlline.jar" "$@"
+      V=$("${JAVA_HOME}/bin/java" -version 2>&1 | head -1 | sed 's/.*"\\([0-9][0-9]*\\).*/\\1/')
+      NA=""
+      [ "$V" -ge 16 ] 2>/dev/null && NA="--enable-native-access=ALL-UNNAMED"
+      [ "$V" -ge 25 ] 2>/dev/null && NA="$NA --sun-misc-unsafe-memory-access=allow"
+      exec "${JAVA_HOME}/bin/java" --add-opens=java.base/java.nio=ALL-UNNAMED $NA -jar "#{libexec}/gizmosqlline.jar" "$@"
     EOS
   end
 
