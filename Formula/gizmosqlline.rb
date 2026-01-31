@@ -1,11 +1,11 @@
 class Gizmosqlline < Formula
   desc "GizmoSQL JDBC command-line client for GizmoSQL servers"
   homepage "https://github.com/gizmodata/gizmosqlline"
-  version "2.0.0"
+  version "2.0.1"
   license "Apache-2.0"
 
   url "https://github.com/gizmodata/gizmosqlline/releases/download/v#{version}/gizmosqlline.jar"
-  sha256 "0698bf851ac3b7a2735e4314d40d395b43466ed6a5f990d87cbeedb90e0087e0"
+  sha256 "fbb8894bda67b1646765f9605aac9f4053840aa18fc085e00aa7b168503a3c6d"
 
   depends_on "openjdk"
 
@@ -15,7 +15,7 @@ class Gizmosqlline < Formula
     (bin/"gizmosqlline").write <<~EOS
       #!/bin/bash
       export JAVA_HOME="#{Formula["openjdk"].opt_prefix}"
-      exec "${JAVA_HOME}/bin/java" --add-opens=java.base/java.nio=ALL-UNNAMED -jar "#{libexec}/gizmosqlline.jar" "$@"
+      exec "${JAVA_HOME}/bin/java" --add-opens=java.base/java.nio=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -jar "#{libexec}/gizmosqlline.jar" "$@"
     EOS
   end
 
