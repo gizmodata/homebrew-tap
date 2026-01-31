@@ -1,11 +1,11 @@
 class Gizmosqlline < Formula
-  desc "Flight SQL command-line client for GizmoSQL servers"
+  desc "GizmoSQL JDBC command-line client for GizmoSQL servers"
   homepage "https://github.com/gizmodata/gizmosqlline"
-  version "1.0.5"
+  version "2.0.0"
   license "Apache-2.0"
 
   url "https://github.com/gizmodata/gizmosqlline/releases/download/v#{version}/gizmosqlline.jar"
-  sha256 "70caf07e4c6979fc9229f341045e7a8a52ca88076121cf2e0fef469140711ae7"
+  sha256 "0698bf851ac3b7a2735e4314d40d395b43466ed6a5f990d87cbeedb90e0087e0"
 
   depends_on "openjdk"
 
@@ -21,13 +21,13 @@ class Gizmosqlline < Formula
 
   def caveats
     <<~EOS
-      GizmoSQLLine is a Flight SQL command-line client.
+      GizmoSQLLine is a GizmoSQL JDBC command-line client.
 
       To start in interactive mode:
         gizmosqlline
 
       To connect directly:
-        gizmosqlline -u "jdbc:arrow-flight-sql://localhost:31337" -n user -p password
+        gizmosqlline -u "jdbc:gizmosql://localhost:31337" -n user -p password
 
       For help with SQLLine commands, type !help after connecting.
     EOS
