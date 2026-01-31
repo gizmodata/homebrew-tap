@@ -1,11 +1,11 @@
 class Gizmosqlline < Formula
   desc "GizmoSQL JDBC command-line client for GizmoSQL servers"
   homepage "https://github.com/gizmodata/gizmosqlline"
-  version "2.0.1"
+  version "2.1.0"
   license "Apache-2.0"
 
   url "https://github.com/gizmodata/gizmosqlline/releases/download/v#{version}/gizmosqlline.jar"
-  sha256 "fbb8894bda67b1646765f9605aac9f4053840aa18fc085e00aa7b168503a3c6d"
+  sha256 "62db267383760e039aa225f40193d89f180a25dfda38872ce32a4a452fc3c8b9"
 
   depends_on "openjdk"
 
