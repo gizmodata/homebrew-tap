@@ -32,7 +32,7 @@ brew install gizmodata/tap/gizmosqlline
 
 ## Usage
 
-### gizmosql
+### [gizmosql](https://github.com/gizmodata/gizmosql)
 
 Start the server:
 
@@ -48,7 +48,7 @@ gizmosql_client --host localhost --port 31337 --username scott --password tiger 
 
 For TLS and authentication options, run `gizmosql_server --help` or `gizmosql_client --help`.
 
-### gizmosql-odbc
+### [gizmosql-odbc](https://github.com/gizmodata/gizmosql-odbc-driver)
 
 Install the driver:
 
@@ -63,7 +63,7 @@ The driver library is installed to `$(brew --prefix)/lib/libgizmosql-odbc.dylib`
 Driver = /opt/homebrew/lib/libgizmosql-odbc.dylib
 ```
 
-### gizmosql-ui
+### [gizmosql-ui](https://github.com/gizmodata/gizmosql-ui)
 
 ```bash
 gizmosql-ui
@@ -71,7 +71,7 @@ gizmosql-ui
 
 This starts a local web server at http://localhost:3000 and opens your browser.
 
-### gizmosqlline
+### [gizmosqlline](https://github.com/gizmodata/gizmosqlline)
 
 Interactive mode:
 
