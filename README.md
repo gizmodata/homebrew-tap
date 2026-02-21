@@ -7,6 +7,7 @@ This is the official Homebrew tap for GizmoData tools.
 ```bash
 brew tap gizmodata/tap
 brew install gizmosql
+brew install gizmosql-odbc
 brew install gizmosql-ui
 brew install gizmosqlline
 ```
@@ -15,6 +16,7 @@ Or install directly:
 
 ```bash
 brew install gizmodata/tap/gizmosql
+brew install gizmodata/tap/gizmosql-odbc
 brew install gizmodata/tap/gizmosql-ui
 brew install gizmodata/tap/gizmosqlline
 ```
@@ -24,6 +26,7 @@ brew install gizmodata/tap/gizmosqlline
 | Formula | Description |
 |---------|-------------|
 | [`gizmosql`](https://github.com/gizmodata/gizmosql) | High-performance SQL server built on DuckDB/SQLite with Arrow Flight SQL |
+| [`gizmosql-odbc`](https://github.com/gizmodata/gizmosql-odbc-driver) | ODBC driver for GizmoSQL (Arrow Flight SQL) |
 | [`gizmosql-ui`](https://github.com/gizmodata/gizmosql-ui) | Web-based SQL interface for GizmoSQL servers |
 | [`gizmosqlline`](https://github.com/gizmodata/gizmosqlline) | Flight SQL command-line client (SQLLine with Arrow Flight SQL driver) |
 
@@ -44,6 +47,21 @@ gizmosql_client --host localhost --port 31337 --username scott --password tiger 
 ```
 
 For TLS and authentication options, run `gizmosql_server --help` or `gizmosql_client --help`.
+
+### gizmosql-odbc
+
+Install the driver:
+
+```bash
+brew install gizmodata/tap/gizmosql-odbc
+```
+
+The driver library is installed to `$(brew --prefix)/lib/libgizmosql-odbc.dylib`. Configure it in your ODBC driver manager (iODBC or unixODBC) `odbcinst.ini`:
+
+```ini
+[GizmoSQL]
+Driver = /opt/homebrew/lib/libgizmosql-odbc.dylib
+```
 
 ### gizmosql-ui
 
