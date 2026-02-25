@@ -10,7 +10,7 @@ class GizmosqlOdbc < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.0.0/libgizmosql-odbc-macos-arm64.dylib"
-      sha256 "88b5f80a16f91599f7a065fecb9743f39ad4674ace5ab5b0cf09414121742899"
+      sha256 "53dda7e5a816742c77b82f8e6d108a8c4b0df0833582417babdc6146b221d742"
     end
   end
 
@@ -20,7 +20,7 @@ class GizmosqlOdbc < Formula
       sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
     elsif Hardware::CPU.intel?
       url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.0.0/libgizmosql-odbc-linux-x64.so"
-      sha256 "f0332a80d9667240b73fdead3c2a851f3b857c6dbad49290b0a12b9db3124ae3"
+      sha256 "d0394c0fbf466384a45a73aba9268eb3dfa15333ef34aa9458e3eef32bb50ef5"
     end
   end
 
