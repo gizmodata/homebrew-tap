@@ -4,23 +4,23 @@
 class GizmosqlOdbc < Formula
   desc "GizmoSQL ODBC Driver"
   homepage "https://gizmodata.com/gizmosql"
-  version "1.0.0"
+  version "1.1.0"
   license "Apache-2.0"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.0.0/libgizmosql-odbc-macos-arm64.dylib"
-      sha256 "40b11bfd69554e259b028488ed8e257d523d2835216ce561b1086b1b72bcce99"
+      url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.1.0/libgizmosql-odbc-macos-arm64.dylib"
+      sha256 "0d054fd23d7b5077353f844309f36ef333094f1364110ad9900cb1202025ce81"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.0.0/libgizmosql-odbc-linux-arm64.so"
+      url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.1.0/libgizmosql-odbc-linux-arm64.so"
       sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
     elsif Hardware::CPU.intel?
-      url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.0.0/libgizmosql-odbc-linux-x64.so"
-      sha256 "7b385beb7a8cb26e6bb74c72cec396f3179e743cf653f93918bc9d77e3901132"
+      url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.1.0/libgizmosql-odbc-linux-x64.so"
+      sha256 "2cef70d59c9a03cc71d56d3751d64413072d312663de69dfeaf987c0ff6f098b"
     end
   end
 
@@ -36,42 +36,57 @@ class GizmosqlOdbc < Formula
     end
   end
 
-  def caveats
+  def post_install
+    odbcinst_ini = etc/"odbcinst.ini"
+    driver_name = "GizmoSQL ODBC Driver"
+
     if OS.mac?
-      <<~EOS
-        To register the driver, add the following to /usr/local/etc/odbcinst.ini:
-
-[GizmoSQL ODBC Driver]
-Driver = #{lib}/libgizmosql-odbc.dylib
-
-        Then add a DSN to ~/.odbc.ini:
-
-[GizmoSQL]
-Driver        = GizmoSQL ODBC Driver
-host          = localhost
-port          = 32010
-uid           = your-username
-pwd           = your-password
-useEncryption = true
-      EOS
+      driver_path = lib/"libgizmosql-odbc.dylib"
     else
-      <<~EOS
-        To register the driver, add the following to /etc/odbcinst.ini:
+      driver_path = lib/"libgizmosql-odbc.so"
+    end
 
-[GizmoSQL ODBC Driver]
-Driver = #{lib}/libgizmosql-odbc.so
+    if odbcinst_ini.exist?
+      contents = odbcinst_ini.read
+      if contents.include?("[#{driver_name}]")
+        # Update existing driver entry with new path
+        contents.gsub!(/(\[#{Regexp.escape(driver_name)}\]\s*\nDriver\s*=\s*).*/, "\1#{driver_path}")
+        odbcinst_ini.atomic_write(contents)
+      else
+        # Append new driver entry to existing file
+        odbcinst_ini.open("a") do |f|
+f.puts "" unless contents.end_with?("\n\n")
+f.puts "[ODBC Drivers]" unless contents.include?("[ODBC Drivers]")
+f.puts ""
+f.puts "[#{driver_name}]"
+f.puts "Driver = #{driver_path}"
+        end
+      end
+    else
+      odbcinst_ini.write <<~EOS
+        [ODBC Drivers]
+        #{driver_name} = Installed
 
-        Then add a DSN to ~/.odbc.ini:
-
-[GizmoSQL]
-Driver        = GizmoSQL ODBC Driver
-host          = localhost
-port          = 32010
-uid           = your-username
-pwd           = your-password
-useEncryption = true
+        [#{driver_name}]
+        Driver = #{driver_path}
       EOS
     end
+  end
+
+  def caveats
+    <<~EOS
+      The driver has been registered automatically.
+
+      To create a DSN, add the following to ~/.odbc.ini:
+
+        [GizmoSQL]
+        Driver        = GizmoSQL ODBC Driver
+        host          = localhost
+        port          = 32010
+        uid           = your-username
+        pwd           = your-password
+        useEncryption = true
+    EOS
   end
 
   test do
