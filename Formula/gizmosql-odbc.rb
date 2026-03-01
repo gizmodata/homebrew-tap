@@ -82,7 +82,7 @@ f.puts "Driver = #{driver_path}"
         [GizmoSQL]
         Driver        = GizmoSQL ODBC Driver
         host          = localhost
-        port          = 32010
+        port          = 31337
         uid           = your-username
         pwd           = your-password
         useEncryption = true
