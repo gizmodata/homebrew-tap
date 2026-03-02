@@ -4,23 +4,23 @@
 class GizmosqlOdbc < Formula
   desc "GizmoSQL ODBC Driver"
   homepage "https://gizmodata.com/gizmosql"
-  version "1.1.0"
+  version "1.1.2"
   license "Apache-2.0"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.1.0/libgizmosql-odbc-macos-arm64.dylib"
-      sha256 "d7274168e9160371de23abefee5b7a30bdbb924817423451ae840e2e580d1b2a"
+      url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.1.2/libgizmosql-odbc-macos-arm64.dylib"
+      sha256 "a4f92f6ebbda61f722799bbe66cee5974c98852f38030f4fd44e68db2230f2ae"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.1.0/libgizmosql-odbc-linux-arm64.so"
+      url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.1.2/libgizmosql-odbc-linux-arm64.so"
       sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
     elsif Hardware::CPU.intel?
-      url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.1.0/libgizmosql-odbc-linux-x64.so"
-      sha256 "2a54ebc2bacd0ac75e6e6db16c8bea38cdc0389d1a0437f04680078e576ab786"
+      url "https://github.com/gizmodata/gizmosql-odbc-driver/releases/download/v1.1.2/libgizmosql-odbc-linux-x64.so"
+      sha256 "eb473e4ed2d6d3ba333a2c7a2216409f1f7c9f436d96793c5cfaef0e1a569851"
     end
   end
 
@@ -82,7 +82,7 @@ f.puts "Driver = #{driver_path}"
         [GizmoSQL]
         Driver        = GizmoSQL ODBC Driver
         host          = localhost
-        port          = 32010
+        port          = 31337
         uid           = your-username
         pwd           = your-password
         useEncryption = true
