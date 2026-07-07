@@ -7,23 +7,23 @@
 class GizmosqlLts < Formula
   desc "GizmoSQL (LTS channel) — Flight SQL server on the DuckDB LTS release"
   homepage "https://github.com/gizmodata/gizmosql"
-  version "1.32.0"
+  version "1.33.0"
   license "Apache-2.0"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/gizmodata/gizmosql/releases/download/v1.32.0/gizmosql_cli_macos_arm64_lts.zip"
-      sha256 "4f01a185d8dbe3b7f78980f33a4ef512c270fe1e852612b259e0717f996763f8"
+      url "https://github.com/gizmodata/gizmosql/releases/download/v1.33.0/gizmosql_cli_macos_arm64_lts.zip"
+      sha256 "10ab6d8f5593ea32d7b42475fd280b9682f0cb1b215db7f5d3c047fc5a9c9b38"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/gizmodata/gizmosql/releases/download/v1.32.0/gizmosql_cli_linux_arm64_lts.zip"
-      sha256 "79c88124c0deee2b715faa9dd9b031620899faf1b4c4e1e58af26e0563d1041d"
+      url "https://github.com/gizmodata/gizmosql/releases/download/v1.33.0/gizmosql_cli_linux_arm64_lts.zip"
+      sha256 "2365ac5051802bdcc522af38521376974e42dff9e7d96867f72d6d4dd4afa94e"
     elsif Hardware::CPU.intel?
-      url "https://github.com/gizmodata/gizmosql/releases/download/v1.32.0/gizmosql_cli_linux_amd64_lts.zip"
-      sha256 "4e67d48afeb3b17711862558034ffc79fd6b1ce3dad55b1305d73d06a7bff2c4"
+      url "https://github.com/gizmodata/gizmosql/releases/download/v1.33.0/gizmosql_cli_linux_amd64_lts.zip"
+      sha256 "bebe176bfdce4f0409b338df97285f3ee61784662e3074b149596a761e38c9d5"
     end
   end
 
