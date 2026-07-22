@@ -6,13 +6,19 @@ This is the official Homebrew tap for GizmoData tools.
 
 ```bash
 brew tap gizmodata/tap
+brew trust gizmodata/tap
 brew install gizmosql
 brew install gizmosql-odbc
 brew install gizmosql-ui
 brew install gizmosqlline
 ```
 
-Or install directly:
+> **Note:** Homebrew 6.0 (June 2026) requires third-party taps to be explicitly
+> trusted before formulae can be installed from them — hence the
+> `brew trust gizmodata/tap` step. On older Homebrew versions the command
+> doesn't exist; simply skip it.
+
+Or install directly (grants a one-off trust for just that formula):
 
 ```bash
 brew install gizmodata/tap/gizmosql
