@@ -4,23 +4,23 @@
 class Gizmosql < Formula
   desc "High-performance SQL server built on DuckDB/SQLite with Arrow Flight SQL"
   homepage "https://github.com/gizmodata/gizmosql"
-  version "1.36.1"
+  version "1.37.0"
   license "Apache-2.0"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/gizmodata/gizmosql/releases/download/v1.36.1/gizmosql_cli_macos_arm64.zip"
-      sha256 "2ef3fdebead2a30bbbb357a0d16433ee91e4ea5a76e5485e17e34d0df19a8f29"
+      url "https://github.com/gizmodata/gizmosql/releases/download/v1.37.0/gizmosql_cli_macos_arm64.zip"
+      sha256 "68651288f8704beaaa9812c8353b693c49a92034f1d76b9daf1346e3321ab1ed"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/gizmodata/gizmosql/releases/download/v1.36.1/gizmosql_cli_linux_arm64.zip"
-      sha256 "1e231ad866463ee8a7974e4d4f1b021bff01aab4210aa92988dacf1a230e4a6b"
+      url "https://github.com/gizmodata/gizmosql/releases/download/v1.37.0/gizmosql_cli_linux_arm64.zip"
+      sha256 "65fcda9fbd3cb017d677ee76ae9b172815f3324da4a3c4ccbb9bc7926d8027e3"
     elsif Hardware::CPU.intel?
-      url "https://github.com/gizmodata/gizmosql/releases/download/v1.36.1/gizmosql_cli_linux_amd64.zip"
-      sha256 "48d138840ac541a12838ad85b420785c462699aea17e634b4878d3b45e36cf60"
+      url "https://github.com/gizmodata/gizmosql/releases/download/v1.37.0/gizmosql_cli_linux_amd64.zip"
+      sha256 "c7b54c77e28c62ff3f24e4fd7ccae126bba04615fcc0399cc699be986d117330"
     end
   end
 
