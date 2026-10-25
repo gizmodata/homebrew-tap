@@ -9,6 +9,7 @@ class WarpsqlOdbc < Formula
   depends_on "unixodbc"
 
   on_macos do
+    depends_on macos: :sequoia
     on_arm do
       url "https://github.com/gizmodata/warp-sql-odbc/releases/download/v1.0.0/warpsql-odbc-macos-arm64.tar.gz"
       sha256 "66e7ad2e7c2740c2866f4913c8108d5f403f0953389c3c2179d09ed86f2d8666"
