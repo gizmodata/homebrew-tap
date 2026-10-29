@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 class HardchargerOdbc < Formula
-  desc "Hardcharger ODBC driver using native Warp SQL and Arrow streaming"
+  desc "Hardcharger ODBC driver using native Chargewire and Arrow streaming"
   homepage "https://github.com/gizmodata/hardcharger-odbc-driver"
   version "1.0.1"
   license "Apache-2.0"
