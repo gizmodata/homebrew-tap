@@ -31,12 +31,25 @@ brew install gizmodata/tap/gizmosqlline
 
 | Formula | Description |
 |---------|-------------|
+| [`chargewire-odbc`](https://github.com/gizmodata/chargewire-odbc) | ODBC driver for Chargewire servers (native Chargewire, Arrow streaming) |
 | [`gizmosql`](https://github.com/gizmodata/gizmosql) | High-performance SQL server built on DuckDB/SQLite with Arrow Flight SQL |
 | [`gizmosql-odbc`](https://github.com/gizmodata/gizmosql-odbc-driver) | ODBC driver for GizmoSQL (Arrow Flight SQL) |
 | [`gizmosql-ui`](https://github.com/gizmodata/gizmosql-ui) | Web-based SQL interface for GizmoSQL servers |
 | [`gizmosqlline`](https://github.com/gizmodata/gizmosqlline) | Flight SQL command-line client (SQLLine with Arrow Flight SQL driver) |
+| [`hardcharger-odbc`](https://github.com/gizmodata/hardcharger-odbc-driver) | ODBC driver for Hardcharger (Chargewire), with `hardcharger://` URIs |
 
 ## Usage
+
+### [chargewire-odbc](https://github.com/gizmodata/chargewire-odbc) and [hardcharger-odbc](https://github.com/gizmodata/hardcharger-odbc-driver)
+
+```bash
+brew install gizmodata/tap/hardcharger-odbc   # Hardcharger ODBC Driver
+brew install gizmodata/tap/chargewire-odbc    # Chargewire ODBC Driver, for any Chargewire server
+```
+
+Each registers its driver in Homebrew unixODBC's `odbcinst.ini` (`Hardcharger ODBC Driver` or
+`Chargewire ODBC Driver`); `brew info` shows a sample DSN for `~/.odbc.ini`. Requires macOS 15 or
+later on Apple Silicon, or Linux with glibc 2.39 or later.
 
 ### [gizmosql](https://github.com/gizmodata/gizmosql)
 
