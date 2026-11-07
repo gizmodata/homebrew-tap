@@ -4,26 +4,26 @@
 class HardchargerOdbc < Formula
   desc "Hardcharger ODBC driver using native Chargewire and Arrow streaming"
   homepage "https://github.com/gizmodata/hardcharger-odbc-driver"
-  version "1.4.3"
+  version "1.5.0"
   license "Apache-2.0"
   depends_on "unixodbc"
 
   on_macos do
     depends_on macos: :sequoia
     on_arm do
-      url "https://github.com/gizmodata/hardcharger-odbc-driver/releases/download/v1.4.3/hardcharger-odbc-macos-arm64.tar.gz"
-      sha256 "bb735bc8bc3415411f649f33fa3f2fed4cde3f2f536e5e26ba9e9b6ed98a71c9"
+      url "https://github.com/gizmodata/hardcharger-odbc-driver/releases/download/v1.5.0/hardcharger-odbc-macos-arm64.tar.gz"
+      sha256 "3068ce07489c699fa4cbee1c75e7f58589ba2efdd9a6ae36f92629c7ab38a0f3"
     end
   end
   on_linux do
     depends_on "patchelf" => :build
     on_intel do
-      url "https://github.com/gizmodata/hardcharger-odbc-driver/releases/download/v1.4.3/hardcharger-odbc-linux-amd64.tar.gz"
-      sha256 "2a8aec1508d03aeca0c90f62b4b8a80b83c2d4e6cee0cd833aadc2c2a12f8864"
+      url "https://github.com/gizmodata/hardcharger-odbc-driver/releases/download/v1.5.0/hardcharger-odbc-linux-amd64.tar.gz"
+      sha256 "7c895fae7cf51acbb015e62612b9bf84b5f7be149551162bc9b63795825c22e4"
     end
     on_arm do
-      url "https://github.com/gizmodata/hardcharger-odbc-driver/releases/download/v1.4.3/hardcharger-odbc-linux-arm64.tar.gz"
-      sha256 "69cdd930d375dcece0da4c0a8a79f404acc7e5b41607e02da66d6dbbaa67da66"
+      url "https://github.com/gizmodata/hardcharger-odbc-driver/releases/download/v1.5.0/hardcharger-odbc-linux-arm64.tar.gz"
+      sha256 "41b88a3648f5dea47f784958ade0a3a36a2a4945cb5c426de2c22bb96d0a7c7c"
     end
   end
 
