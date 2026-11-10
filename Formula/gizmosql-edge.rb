@@ -8,24 +8,24 @@
 class GizmosqlEdge < Formula
   desc "GizmoSQL (edge channel, experimental) — Flight SQL server on DuckDB 2.0"
   homepage "https://docs.gizmosql.com/edge_channel/"
-  version "1.42.2"
+  version "1.42.3"
   license "Apache-2.0"
 
   on_macos do
     depends_on macos: :sequoia
     if Hardware::CPU.arm?
-      url "https://github.com/gizmodata/gizmosql/releases/download/v1.42.2/gizmosql_cli_macos_arm64_edge.zip"
-      sha256 "2f3a80dca4cf2750e81442d374ecb110999030caff75c45168cc665009dfd31f"
+      url "https://github.com/gizmodata/gizmosql/releases/download/v1.42.3/gizmosql_cli_macos_arm64_edge.zip"
+      sha256 "29cbec043b8bec09a3ea0c436dc065bb39b82ece53caf40f5ad5525d4491d8ae"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/gizmodata/gizmosql/releases/download/v1.42.2/gizmosql_cli_linux_arm64_edge.zip"
-      sha256 "6752f6e4260d34422fc3ae76030967dc943696bb4f8316dabe0586715849d0bc"
+      url "https://github.com/gizmodata/gizmosql/releases/download/v1.42.3/gizmosql_cli_linux_arm64_edge.zip"
+      sha256 "499aa400bef1fa86ac64b116b4e11d967d0c3a0e77376304e4a825c9be89504d"
     elsif Hardware::CPU.intel?
-      url "https://github.com/gizmodata/gizmosql/releases/download/v1.42.2/gizmosql_cli_linux_amd64_edge.zip"
-      sha256 "b352d8e8400de320c1f6bc0ff58a0a459c1efc82ad49aa13b6bfa5b98b203173"
+      url "https://github.com/gizmodata/gizmosql/releases/download/v1.42.3/gizmosql_cli_linux_amd64_edge.zip"
+      sha256 "9101740961875f8a7d4cfcca321d61515bfeffe9fd8ae30bc3d25db0c0da124d"
     end
   end
 
