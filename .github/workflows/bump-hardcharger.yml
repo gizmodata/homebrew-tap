@@ -1,0 +1,196 @@
+# Points the hardcharger formula and the hardcharger-desktop cask at a published Hardcharger
+# release. gizmodata/hardcharger calls it (its homebrew.yml, which its release run dispatches)
+# with a deploy key for this repository:
+#
+#   prepare   scripts/bump_hardcharger.py rewrites the version, URLs and checksums from the
+#             release's SHA256SUMS
+#   test      the rewritten files are installed and tested with brew on macOS, Linux x86-64 and
+#             Linux arm64 (scripts/ci-test.sh), from the published release assets
+#   publish   only when every test passed: one commit to main, then main is read back
+#
+# Nothing reaches main unless the tests passed. A version older than the tap's changes nothing
+# (and succeeds); a version the tap already has changes nothing either. `dry_run` does
+# everything but the push, and needs no key.
+name: Bump Hardcharger
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: Published Hardcharger release, X.Y.Z (a leading v is accepted); never a release candidate
+        type: string
+        required: true
+      dry_run:
+        description: Bump and test, but push nothing
+        type: boolean
+        default: false
+    secrets:
+      TAP_DEPLOY_KEY:
+        description: A deploy key with write access to gizmodata/homebrew-tap (not needed for a dry run)
+        required: false
+    outputs:
+      changed:
+        description: "'true' when the formula and cask had to change"
+        value: ${{ jobs.prepare.outputs.changed }}
+      version:
+        description: The version the tap is at after this run
+        value: ${{ jobs.prepare.outputs.version }}
+
+permissions:
+  contents: read
+
+env:
+  TAP_REPOSITORY: gizmodata/homebrew-tap
+
+jobs:
+  prepare:
+    name: Bump the formula and cask
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      changed: ${{ steps.bump.outputs.changed }}
+      version: ${{ steps.bump.outputs.version }}
+      base: ${{ steps.base.outputs.sha }}
+    env:
+      VERSION: ${{ inputs.version }}
+    steps:
+      # Before any runner time is spent on tests whose result could not be published.
+      - name: A real run needs the deploy key
+        if: ${{ !inputs.dry_run }}
+        env:
+          KEY: ${{ secrets.TAP_DEPLOY_KEY }}
+        run: |
+          if [ -z "$KEY" ]; then
+            echo "::error::TAP_DEPLOY_KEY is empty: pass a deploy key with write access to $TAP_REPOSITORY (or run with dry_run)"
+            exit 1
+          fi
+      - uses: actions/checkout@v7
+        with:
+          repository: ${{ env.TAP_REPOSITORY }}
+          ref: main
+      - id: base
+        run: echo "sha=$(git rev-parse HEAD)" | tee -a "$GITHUB_OUTPUT"
+      - name: The release is published, and not a pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          released="$(gh release view "v${VERSION#v}" --repo gizmodata/hardcharger --json isDraft,isPrerelease --jq '(.isDraft or .isPrerelease) == false')"
+          if [ "$released" != true ]; then
+            echo "::error::gizmodata/hardcharger v${VERSION#v} is not a published, stable release"
+            exit 1
+          fi
+      - id: bump
+        run: python3 scripts/bump_hardcharger.py --version "$VERSION"
+      - run: git diff --stat
+      - uses: actions/upload-artifact@v7
+        with:
+          name: homebrew-hardcharger-bump
+          path: |
+            Formula/hardcharger.rb
+            Casks/hardcharger-desktop.rb
+          if-no-files-found: error
+
+  test:
+    name: Install and test (${{ matrix.os }})
+    needs: prepare
+    if: needs.prepare.outputs.changed == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          repository: ${{ env.TAP_REPOSITORY }}
+          ref: ${{ needs.prepare.outputs.base }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: homebrew-hardcharger-bump
+          path: .
+      - name: The bumped files are in place
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          git diff --stat
+          if git diff --quiet; then echo "the artifact changed nothing in the checkout"; exit 1; fi
+          for file in Formula/hardcharger.rb Casks/hardcharger-desktop.rb; do
+            grep -F "version \"$VERSION\"" "$file" || { echo "$file is not at $VERSION"; exit 1; }
+          done
+      - name: Set up Homebrew
+        run: scripts/ci-setup-brew.sh
+      - name: Install and test
+        run: scripts/ci-test.sh hardcharger cask:hardcharger-desktop
+
+  # Runs when the tests passed, and also when there was nothing to change (to confirm that the
+  # tap really is at the version this run reports).
+  publish:
+    name: Publish to the tap
+    needs: [prepare, test]
+    if: ${{ !cancelled() && needs.prepare.result == 'success' && (needs.prepare.outputs.changed != 'true' || needs.test.result == 'success') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      VERSION: ${{ inputs.version }}
+      EXPECTED: ${{ needs.prepare.outputs.version }}
+      CHANGED: ${{ needs.prepare.outputs.changed }}
+      DRY_RUN: ${{ inputs.dry_run }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          repository: ${{ env.TAP_REPOSITORY }}
+          ref: main
+          ssh-key: ${{ secrets.TAP_DEPLOY_KEY }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: homebrew-hardcharger-bump
+          path: ${{ runner.temp }}/tested
+      # main may have moved since `prepare` (another bump, a hand edit): bump what is there now,
+      # and publish only if that gives exactly the files the tests ran.
+      - name: Commit and push
+        if: ${{ needs.prepare.outputs.changed == 'true' && !inputs.dry_run }}
+        env:
+          TESTED: ${{ runner.temp }}/tested
+        run: |
+          python3 scripts/bump_hardcharger.py --version "$VERSION"
+          for file in Formula/hardcharger.rb Casks/hardcharger-desktop.rb; do
+            if ! cmp --silent "$file" "$TESTED/$file"; then
+              echo "::error::$file on main changed during this run, so what would be pushed is not what was tested. Run it again."
+              exit 1
+            fi
+          done
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Formula/hardcharger.rb Casks/hardcharger-desktop.rb
+          git commit --message "hardcharger ${EXPECTED}, hardcharger-desktop ${EXPECTED}"
+          sha="$(git rev-parse HEAD)"
+          git push origin "$sha:refs/heads/main"
+          remote="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [ "$remote" != "$sha" ]; then
+            echo "::error::pushed $sha, but main is at ${remote:-nothing}"
+            exit 1
+          fi
+          echo "pushed $sha to $TAP_REPOSITORY main"
+      - name: Confirm what main has
+        run: |
+          git fetch --quiet origin main
+          formula="$(git show origin/main:Formula/hardcharger.rb | sed -n 's/^ *version "\(.*\)"$/\1/p')"
+          cask="$(git show origin/main:Casks/hardcharger-desktop.rb | sed -n 's/^ *version "\(.*\)"$/\1/p')"
+          echo "main: hardcharger $formula, hardcharger-desktop $cask"
+          if [ -z "$formula" ] || [ -z "$cask" ]; then
+            echo "::error::could not read the versions on main"
+            exit 1
+          fi
+          if [ "$CHANGED" = true ] && [ "$DRY_RUN" = true ]; then
+            echo "::notice::dry run: the bump to $EXPECTED passed its tests and was not pushed"
+            exit 0
+          fi
+          if [ "$formula" != "$EXPECTED" ] || [ "$cask" != "$EXPECTED" ]; then
+            echo "::error::expected both at $EXPECTED"
+            exit 1
+          fi
+          {
+            echo "### Homebrew"
+            echo
+            echo "\`gizmodata/tap/hardcharger\` and the \`hardcharger-desktop\` cask are at **$EXPECTED**."
+          } >> "$GITHUB_STEP_SUMMARY"

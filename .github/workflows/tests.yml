@@ -1,0 +1,123 @@
+# Installs and tests what a change touches, the way a user gets it (`brew install`,
+# `brew test`), on macOS and on Linux x86-64 and arm64:
+#   - a pull request or a push to main: the formulae and casks it changed
+#   - a change to scripts/ or to a workflow, and a manual run with no input: the hardcharger
+#     formula and the hardcharger-desktop cask (what bump-hardcharger.yml maintains)
+#   - a manual run with `targets`: those
+name: Tests
+on:
+  pull_request:
+    paths: ["Formula/**", "Casks/**", "scripts/**", ".github/workflows/**"]
+  push:
+    branches: [main]
+    paths: ["Formula/**", "Casks/**", "scripts/**", ".github/workflows/**"]
+  workflow_dispatch:
+    inputs:
+      targets:
+        description: "Formulae and casks to test, space separated (cask:<name> for a cask). Empty: hardcharger cask:hardcharger-desktop"
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+jobs:
+  scripts:
+    name: Bump script tests, shellcheck
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Bump script tests
+        run: |
+          python3 -m unittest discover --start-directory scripts --pattern 'test_*.py' 2> unittest.log || { cat unittest.log; exit 1; }
+          cat unittest.log
+          # A run that found no tests is a failure, not a pass.
+          ran="$(sed -n 's/^Ran \([0-9][0-9]*\) tests\{0,1\} .*/\1/p' unittest.log)"
+          [ "${ran:-0}" -ge 10 ] || { echo "expected at least 10 tests, ran ${ran:-0}"; exit 1; }
+      - name: shellcheck
+        run: shellcheck scripts/*.sh
+
+  targets:
+    name: What to test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      targets: ${{ steps.targets.outputs.targets }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - id: targets
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT: ${{ inputs.targets }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          default="hardcharger cask:hardcharger-desktop"
+          if [ "$EVENT" = workflow_dispatch ]; then
+            targets="${INPUT:-$default}"
+          else
+            base="$PR_BASE"
+            if [ "$EVENT" = push ]; then base="$BEFORE"; fi
+            if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2> /dev/null; then
+              targets="$default"  # nothing to compare with (a new branch)
+            else
+              targets=""
+              while IFS= read -r file; do
+                case "$file" in
+                  Formula/*.rb) targets="$targets $(basename "$file" .rb)" ;;
+                  Casks/*.rb) targets="$targets cask:$(basename "$file" .rb)" ;;
+                  scripts/* | .github/workflows/*) targets="$targets $default" ;;
+                esac
+              done < <(git diff --name-only --diff-filter=AMR "$base" HEAD)
+            fi
+          fi
+          # Each name once, and only names that can be formula or cask names.
+          targets="$(tr ' ' '\n' <<< "$targets" | awk 'NF && !seen[$0]++' | tr '\n' ' ' | sed 's/ $//')"
+          for target in $targets; do
+            [[ "$target" =~ ^(cask:)?[a-z0-9][a-z0-9@._+-]*$ ]] || { echo "not a formula or cask name: $target"; exit 1; }
+          done
+          echo "targets=$targets" | tee -a "$GITHUB_OUTPUT"
+
+  install:
+    name: Install and test (${{ matrix.os }})
+    needs: [scripts, targets]
+    if: needs.targets.outputs.targets != ''
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    env:
+      TARGETS: ${{ needs.targets.outputs.targets }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Homebrew
+        run: scripts/ci-setup-brew.sh
+      - name: Install and test
+        run: |
+          read -r -a targets <<< "$TARGETS"
+          if [ "$RUNNER_OS" != macOS ]; then
+            # Casks are macOS only; a change to casks alone has nothing to test here.
+            formulae=()
+            for target in "${targets[@]}"; do
+              if [[ "$target" != cask:* ]]; then formulae+=("$target"); fi
+            done
+            if [ ${#formulae[@]} -eq 0 ]; then
+              echo "only casks changed ($TARGETS): nothing to test on $RUNNER_OS"
+              exit 0
+            fi
+            targets=("${formulae[@]}")
+          fi
+          scripts/ci-test.sh "${targets[@]}"
+      # The files this tap keeps style-clean. (The older formulae have known offenses.)
+      - name: brew style
+        if: runner.os == 'macOS' && contains(needs.targets.outputs.targets, 'hardcharger')
+        run: brew style Formula/hardcharger.rb Casks/hardcharger-desktop.rb
