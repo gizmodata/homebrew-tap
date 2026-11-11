@@ -7,6 +7,8 @@ This is the official Homebrew tap for GizmoData tools.
 ```bash
 brew tap gizmodata/tap
 brew trust gizmodata/tap
+brew install hardcharger
+brew install --cask hardcharger-desktop
 brew install gizmosql
 brew install gizmosql-odbc
 brew install gizmosql-ui
@@ -21,6 +23,8 @@ brew install gizmosqlline
 Or install directly (grants a one-off trust for just that formula):
 
 ```bash
+brew install gizmodata/tap/hardcharger
+brew install --cask gizmodata/tap/hardcharger-desktop
 brew install gizmodata/tap/gizmosql
 brew install gizmodata/tap/gizmosql-odbc
 brew install gizmodata/tap/gizmosql-ui
@@ -31,6 +35,7 @@ brew install gizmodata/tap/gizmosqlline
 
 | Formula | Description |
 |---------|-------------|
+| [`hardcharger`](https://github.com/gizmodata/hardcharger) | Hardcharger, the DuckDB 2.0 server: `hardcharger-server` and the `hardcharger` command-line client (with its web UI) |
 | [`chargewire-odbc`](https://github.com/gizmodata/chargewire-odbc) | ODBC driver for Chargewire servers (native Chargewire, Arrow streaming) |
 | [`gizmosql`](https://github.com/gizmodata/gizmosql) | High-performance SQL server built on DuckDB/SQLite with Arrow Flight SQL |
 | [`gizmosql-odbc`](https://github.com/gizmodata/gizmosql-odbc-driver) | ODBC driver for GizmoSQL (Arrow Flight SQL) |
@@ -38,7 +43,50 @@ brew install gizmodata/tap/gizmosqlline
 | [`gizmosqlline`](https://github.com/gizmodata/gizmosqlline) | Flight SQL command-line client (SQLLine with Arrow Flight SQL driver) |
 | [`hardcharger-odbc`](https://github.com/gizmodata/hardcharger-odbc-driver) | ODBC driver for Hardcharger (Chargewire), with `hardcharger://` URIs |
 
+## Available Casks
+
+| Cask | Description |
+|------|-------------|
+| [`hardcharger-desktop`](https://github.com/gizmodata/hardcharger) | The Hardcharger desktop app (macOS 15 or later, Apple Silicon) |
+
 ## Usage
+
+### [hardcharger](https://github.com/gizmodata/hardcharger)
+
+```bash
+brew install gizmodata/tap/hardcharger
+```
+
+Start a server on port 31337 (the administrator is `hardcharger`; without `--database` the
+database is in memory):
+
+```bash
+HARDCHARGER_ADMIN_PASSWORD='change-me' hardcharger-server --database my.duckdb
+```
+
+Connect with the SQL shell (`--no-tls` because that server has no TLS certificate):
+
+```bash
+HARDCHARGER_PASSWORD='change-me' hardcharger --no-tls --username hardcharger
+```
+
+Or open the web UI on its own and add servers there:
+
+```bash
+hardcharger ui
+```
+
+Requires macOS 15 or later on Apple Silicon, or Linux (x86-64 or arm64) with glibc 2.28 or later.
+The desktop app is a cask, and updates itself once installed:
+
+```bash
+brew install --cask gizmodata/tap/hardcharger-desktop
+```
+
+Both follow every Hardcharger release. If you also use the
+[one-line installer](https://github.com/gizmodata/hardcharger-install) (`~/.hardcharger/bin`), the
+directory that comes first in your `PATH` decides which `hardcharger` runs. See the
+[documentation](https://docs.hardcharger.gizmodata.com).
 
 ### [chargewire-odbc](https://github.com/gizmodata/chargewire-odbc) and [hardcharger-odbc](https://github.com/gizmodata/hardcharger-odbc-driver)
 
@@ -105,6 +153,20 @@ gizmosqlline -u "jdbc:arrow-flight-sql://localhost:31337" -n user -p password
 ```
 
 Type `!help` for available SQLLine commands.
+
+## Maintaining this tap
+
+- **`hardcharger` and `hardcharger-desktop`** are bumped by Hardcharger's release run, through
+  [`bump-hardcharger.yml`](.github/workflows/bump-hardcharger.yml):
+  [`scripts/bump_hardcharger.py`](scripts/bump_hardcharger.py) rewrites the version, URLs and
+  checksums from the release's `SHA256SUMS`, the result is installed and tested with brew on
+  macOS, Linux x86-64 and Linux arm64, and only then pushed here. Everything else in those two
+  files (description, caveats, the test) is edited by hand in this repository. To bump by hand:
+  `gh workflow run homebrew.yml -R gizmodata/hardcharger -f version=X.Y.Z`.
+- **The gizmosql formulae** are written by gizmosql's release run; the ODBC formulae by hand.
+- [`tests.yml`](.github/workflows/tests.yml) installs and tests whatever a pull request or a push
+  changes ([`scripts/ci-test.sh`](scripts/ci-test.sh)). To run it on your own machine without
+  touching your real tap: `scripts/ci-test.sh --tap tap-test/tap hardcharger`.
 
 ## License
 
