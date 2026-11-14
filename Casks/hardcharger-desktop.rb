@@ -1,8 +1,8 @@
 # The version and checksum below are rewritten by scripts/bump_hardcharger.py after each
 # Hardcharger release; everything else is maintained here.
 cask "hardcharger-desktop" do
-  version "2.12.0"
-  sha256 "ef19a1e052a079e8a7973946e1671749bbef19d6705074a4eeacc608046fa874"
+  version "2.12.1"
+  sha256 "4fc34e66fd512342b047718d38a24f469880153e1ffa7eb89c64c428db73e68f"
 
   url "https://github.com/gizmodata/hardcharger/releases/download/v#{version}/Hardcharger-desktop-macos-arm64.dmg"
   name "Hardcharger"
