@@ -4,26 +4,26 @@
 class ChargewireOdbc < Formula
   desc "Chargewire ODBC driver using native Chargewire and Arrow streaming"
   homepage "https://github.com/gizmodata/chargewire-odbc"
-  version "2.4.0"
+  version "2.5.0"
   license "Apache-2.0"
   depends_on "unixodbc"
 
   on_macos do
     depends_on macos: :sequoia
     on_arm do
-      url "https://github.com/gizmodata/chargewire-odbc/releases/download/v2.4.0/chargewire-odbc-macos-arm64.tar.gz"
-      sha256 "03949e41371e983e22eaeeb8b4b9cb8c5ec02918667a7ead6bfeca4bca120c82"
+      url "https://github.com/gizmodata/chargewire-odbc/releases/download/v2.5.0/chargewire-odbc-macos-arm64.tar.gz"
+      sha256 "81b20bac860a546fe0ab059d70c377dd024e7b99fd5d074e01186d033d43cfe3"
     end
   end
   on_linux do
     depends_on "patchelf" => :build
     on_intel do
-      url "https://github.com/gizmodata/chargewire-odbc/releases/download/v2.4.0/chargewire-odbc-linux-amd64.tar.gz"
-      sha256 "0b2f8f3350f943e2b83693baa8add0e993a0543c67ae4cbcd4256f69d9bc07f2"
+      url "https://github.com/gizmodata/chargewire-odbc/releases/download/v2.5.0/chargewire-odbc-linux-amd64.tar.gz"
+      sha256 "f99664dc30a29ea48191cda8fee6b859513d48070fb252ed3f8a8031cd602844"
     end
     on_arm do
-      url "https://github.com/gizmodata/chargewire-odbc/releases/download/v2.4.0/chargewire-odbc-linux-arm64.tar.gz"
-      sha256 "0f361b16962cc8dd14d25c72ec9d3b7a23c89e9399b0d36ec7ef1321cce5c75c"
+      url "https://github.com/gizmodata/chargewire-odbc/releases/download/v2.5.0/chargewire-odbc-linux-arm64.tar.gz"
+      sha256 "27371d2f1a79875369736c66861251e075dc78371720ecc8385a577400e8c0f6"
     end
   end
 
