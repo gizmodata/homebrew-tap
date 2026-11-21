@@ -9,7 +9,7 @@
 class Hardcharger < Formula
   desc "Remote DuckDB 2.0 SQL server with its command-line client and web UI"
   homepage "https://github.com/gizmodata/hardcharger"
-  version "2.13.3"
+  version "2.13.4"
   license "Apache-2.0"
 
   livecheck do
@@ -21,19 +21,19 @@ class Hardcharger < Formula
     depends_on arch: :arm64
     depends_on macos: :sequoia
     on_arm do
-      url "https://github.com/gizmodata/hardcharger/releases/download/v2.13.3/hardcharger-macos-arm64.tar.gz"
-      sha256 "f74b684982c0eb500a599a88c1735ca629c6924631b1bb9c61fb7fb75fcde77f"
+      url "https://github.com/gizmodata/hardcharger/releases/download/v2.13.4/hardcharger-macos-arm64.tar.gz"
+      sha256 "43e57a348ef7ae221a7f922a558b9c54bd07fc285f8b9cf9228d9e516022dccd"
     end
   end
 
   on_linux do
     on_intel do
-      url "https://github.com/gizmodata/hardcharger/releases/download/v2.13.3/hardcharger-linux-amd64.tar.gz"
-      sha256 "99a12d59d63e1934780b696178b0ced661755fe7b8748553888b04b78288a873"
+      url "https://github.com/gizmodata/hardcharger/releases/download/v2.13.4/hardcharger-linux-amd64.tar.gz"
+      sha256 "d9cffb601af41e517ce6fa51dc9f0416c5038736739162108259b75ac6c6c1e0"
     end
     on_arm do
-      url "https://github.com/gizmodata/hardcharger/releases/download/v2.13.3/hardcharger-linux-arm64.tar.gz"
-      sha256 "d1bcb4b4b9329522a874d9f58c79e42f29581c68e74d3d11f05f65f8f5afc417"
+      url "https://github.com/gizmodata/hardcharger/releases/download/v2.13.4/hardcharger-linux-arm64.tar.gz"
+      sha256 "a49953f934b694882740294875d8a5c5720e0ddc2fff754b06433335890002c5"
     end
   end
 
